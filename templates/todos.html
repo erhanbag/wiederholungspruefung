@@ -1,10 +1,28 @@
-{% extends 'base.html' %}
+{% extends 'base2.html' %}
 
 {% block HEADER %}
 	<h2>{% block TITLE %}Todos{% endblock %}</h2>
 {% endblock %}
 
 {% block CONTENT %}
+<div class="container border shadow w-50 pb-3 my-3">
+    <nav class="navbar navbar-expand-xl border-bottom mb-3">
+        <div class="container-fluid px-0">
+            <a class="navbar-brand" href="{{ url_for('index') }}">To-Do App</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {{ render_nav_item('todos', 'Todos') }}
+                    {{ render_nav_item('lists', 'Lists') }}
+                </ul>
+            </div>
+        </div>
+    </nav>
 {% for todo in todos %}
 <div class="form-check">
     <label class="form-check-label" for="{{ todo.id }}">
