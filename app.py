@@ -193,6 +193,36 @@ def delete_list(id):
     return redirect(url_for('lists'))
 
 
+@app.route('/profile')
+@login_required
+def profile():
+    user = current_user
+    return render_template('profile.html', user=user)
+
+
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    if current_user.is_authenticated:
+        user = current_user
+
+        # Delete the todos of the user
+        todos = Todo.query.filter_by(user_id=user.id).all()
+        for todo in todos:
+            db.session.delete(todo)
+
+        # Delete the lists of the user
+        lists = List.query.filter_by(user_id=user.id).all()
+        for list in lists:
+            db.session.delete(list)
+
+        # Finally delete the user account and commit
+        db.session.delete(user)
+        db.session.commit()
+        flash("Your account has been deleted.", 'success')
+        return redirect(url_for('index'))  
+    else:
+        flash("User not found.", 'danger')
+        return redirect(url_for('profile'))
 
 
 @app.route('/insert/sample')

@@ -18,6 +18,7 @@
         
         <div class="d-flex">
             {% if current_user.is_authenticated %}
+                <a href="{{ url_for('profile') }}" class="btn btn-primary"><img src="{{ url_for('static', filename='images/profile-user.png') }}" alt="User Icon" style="vertical-align: middle; width: 23px; margin-right: 6px;">{{current_user.username}}</a>
                 <a href="{{ url_for('todos') }}" class="btn btn-primary">Todos</a>
                 <a href="{{ url_for('logout') }}" class="btn btn-primary">Logout</a>
             {% else %}
