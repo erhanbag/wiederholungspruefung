@@ -26,9 +26,9 @@
 {% for todo in todos %}
 <div class="form-check">
     <label class="form-check-label" for="{{ todo.id }}">
-        <a href="{{ url_for('todo', id=todo.id) }}">{{ todo.description }}</a>
+        <a href="{{ url_for('todo', id=todo.id) }}">{{todo.description}}</a>
     </label>
-    <input class="form-check-input" type="checkbox" id="{{ todo.id }}" disabled
+    <input class="form-check-input" type="checkbox" id="{{ todo.id }}"  disabled
         {% if todo.complete %} checked {% endif %}
     >
 </div>

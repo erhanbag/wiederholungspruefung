@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, request, abort, flash
 from flask_bootstrap import Bootstrap5
-from forms import CreateTodoForm, RegisterForm, LoginForm, TodoForm
+from forms import CreateListForm, CreateTodoForm, RegisterForm, LoginForm, TodoForm
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, LoginManager, login_required, logout_user, current_user
 
@@ -82,19 +82,25 @@ def logout():
 
     return redirect(url_for('login'))
 
-
-
+    
 
 @app.route('/todos/', methods=['GET', 'POST'])
 @login_required
 def todos():
     form = CreateTodoForm()
+    user=current_user
+    user_id = user.id
+    print(user_id)
     if request.method == 'GET':
-        todos = db.session.execute(db.select(Todo).order_by(Todo.id)).scalars()  # !!
+                        
+        todos = db.session.execute(db.select(Todo).filter(Todo.user_id == user_id).order_by(Todo.id)).scalars()
+        print(todos)  # !!
         return render_template('todos.html', todos=todos, form=form)
+    
     else:  # request.method == 'POST'
         if form.validate():
-            todo = Todo(description=form.description.data)  # !!
+            todo = Todo(description=form.description.data, user_id =user_id)  # !!
+            
             db.session.add(todo)  # !!
             db.session.commit()  # !!
             flash('Todo has been created.', 'success')
@@ -108,9 +114,10 @@ def todo(id):
     todo = db.session.get(Todo, id)  # !!
     form = TodoForm(obj=todo)  # (2.)  # !!
     if request.method == 'GET':
+        user = current_user
         if todo:
             if todo.lists: form.list_id.data = todo.lists[0].id  # (3.)  # !!
-            choices = db.session.execute(db.select(List).order_by(List.name)).scalars()  # !!
+            choices = db.session.execute(db.select(List).filter(List.user_id == user.id).order_by(List.name)).scalars()  # !!
             form.list_id.choices = [(0, 'List?')] + [(c.id, c.name) for c in choices]  # !!
             return render_template('todo.html', form=form)
         else:
@@ -135,20 +142,58 @@ def todo(id):
             flash('Nothing happened.', 'info')
             return redirect(url_for('todo', id=id))
 
-@app.route('/lists/')
+@app.route('/lists/', methods=['GET', 'POST'])
 @login_required
 def lists():
-    lists = db.session.execute(db.select(List).order_by(List.name)).scalars()  # (6.)  # !!
-    return render_template('lists.html', lists=lists)
+    form = CreateListForm()
+    user = current_user
+    user_id = user.id
+    if request.method == 'GET':
+        user = current_user
+        lists = db.session.execute(db.select(List).filter(List.user_id == user.id).order_by(List.name)).scalars()
+        return render_template('lists.html', lists=lists, form=form)
+    else:
+        if form.validate():
+            list = List(name=form.name.data, user_id =user_id)  # !!
+            
+            db.session.add(list)  # !!
+            db.session.commit()  # !!
+            flash('List has been created.', 'success')
+        else:
+            flash('No List creation: validation error.', 'warning')
+        return redirect(url_for('lists'))
+ 
 
 @app.route('/lists/<int:id>')
 @login_required
 def list(id):
-    list = db.session.get(List, id)  # !!
-    if list is not None:
-        return render_template('list.html', list=list)
+    user = current_user
+    list = List.query.get(id) 
+    if list:
+        if list.user == user:
+            return render_template('list.html', list=list)
+        else:
+            abort(403)  
     else:
-        return redirect(url_for('lists'))
+        abort(404)  
+
+
+
+
+@app.route('/lists/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_list(id):
+    list_to_delete = List.query.get(id)
+    if list_to_delete:
+        db.session.delete(list_to_delete)
+        db.session.commit()
+        flash('List has been deleted.', 'success')
+    else:
+        flash('List not found.', 'warning')
+    return redirect(url_for('lists'))
+
+
+
 
 @app.route('/insert/sample')
 def run_insert_sample():

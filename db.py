@@ -13,12 +13,13 @@ class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
-
+    lists = db.relationship('List', back_populates='user')
 
 class Todo(db.Model):
     id = db.Column(db.Integer, primary_key=True, index=True)
     complete = db.Column(db.Boolean, default=False)
     description = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     lists = db.relationship('List', secondary='todo_list', back_populates='todos')
 
     def populate_lists(self, list_ids):
@@ -28,8 +29,12 @@ class Todo(db.Model):
         self.lists = lists
 
 class List(db.Model):
+    
+
     id = db.Column(db.Integer, primary_key=True, index=True)
     name = db.Column(db.String, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user = db.relationship('User', back_populates='lists')
     todos = db.relationship(Todo, secondary='todo_list', back_populates='lists')
     complete = False
     
@@ -42,6 +47,9 @@ todo_list = db.Table(
     db.Column('todo_id', db.Integer, db.ForeignKey('todo.id'), primary_key=True),
     db.Column('list_id', db.Integer, db.ForeignKey('list.id'), primary_key=True)
 )
+
+
+
 
 with app.app_context():
     db.create_all()

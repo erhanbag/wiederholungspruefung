@@ -24,13 +24,21 @@
         </div>
     </nav>
 {% for list in lists %}
-<div class="form-check">
+<div class="form-check mb-2">
     <label class="form-check-label" for="{{ list.id }}">
         <a href="{{ url_for('list', id=list.id) }}">{{ list.name }}</a>
     </label>
     <input class="form-check-input" type="checkbox" id="{{ list.id }}" disabled
-        {% if list.complete %} checked {% endif %}
-    >
+        {% if list.complete %} checked {% endif %}>
+    <form action="{{ url_for('delete_list', id=list.id) }}" method="post" style="display: inline;">
+        {{ form.csrf_token }}
+        <button type="submit" class="btn btn-danger btn-sm" style="float: right">Delete</button>
+    </form>
 </div>
 {% endfor %}
+<form action="{{ url_for('lists') }}" method="post" class="row row-cols-auto g-2 pt-3">
+    {{ form.csrf_token }}
+    <div class="col">{{ form.name(class='form-control') }}</div>
+    <div class="col">{{ form.submit(class='btn btn-primary') }}</div>
+</form>
 {% endblock %}
