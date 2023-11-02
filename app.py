@@ -6,6 +6,7 @@ from flask_login import login_user, LoginManager, login_required, logout_user, c
 
 app = Flask(__name__)
 app.static_folder = 'static'
+import api
 app.config.from_mapping(
     SECRET_KEY = 'secret_key_just_for_dev_environment',
     BOOTSTRAP_BOOTSWATCH_THEME = 'pulse'
