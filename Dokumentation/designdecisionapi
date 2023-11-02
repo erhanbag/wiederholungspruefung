@@ -1,0 +1,52 @@
+# 7. - Designentscheidung für die API-Implementierung
+
+## Inhaltsverzeichnis
+
+- [Meta](#meta)
+- [Problemstellung](#problemstellung)
+- [Entscheidung](#entscheidung)
+  - [Warum keine Flask-Erweiterungen?](#warum-keine-flask-erweiterungen)
+  - [Vergleich von Flask und Flask-Erweiterungen](#vergleich-von-flask-und-flask-erweiterungen)
+- [Quellen](#quellen)
+
+
+
+### Meta
+
+Status
+: **Entscheidung getroffen**
+
+Erstellt
+: 02-Nov-2023
+
+### Problemstellung
+
+Bei der Entwicklung meiner RESTful API stand die Auswahl einer geeigneten Methode und Technologie zur Umsetzung der Funktionalität im Vordergrund. Insbesondere war die Wahl zwischen der Verwendung von Flask-Erweiterungen wie Flask-RESTful, Flask-Restless-NG, Flask-RESTX oder Flask-smorest und der Implementierung der API-Funktionalität in reinem Flask von Bedeutung.
+
+### Entscheidung
+
+#### Warum keine Flask-Erweiterungen?
+
+Ich habe mich entschieden, keine der verfügbaren Flask-Erweiterungen (Flask-RESTful, Flask-Restless-NG, Flask-RESTX oder Flask-smorest) in meiner API-Implementierung zu verwenden. Die Entscheidung basiert auf folgenden Überlegungen:
+
+**1. Vollständige Kontrolle:** Bei der direkten Implementierung in Flask habe ich die volle Kontrolle über den Entwicklungsprozess und die Implementierung meiner API. Dies ermöglicht es mir, die Endpunkte und das Verhalten der API genau nach meinen spezifischen Anforderungen zu gestalten.
+
+**2. Anforderungen:** Die speziellen Funktionen und Merkmale, die die Flask-Erweiterungen bieten, waren für mein Projekt nicht zwingend erforderlich. Ich benötigte keine komplexen Funktionen, die über das hinausgehen, was Flask von Natur aus bietet.
+
+**3. Erfahrung:** Ich habe bereits Erfahrung in der Entwicklung von Flask-Anwendungen und APIs ohne zusätzliche Erweiterungen. Diese Erfahrung hat es mir erleichtert, die API gemäß den Projektspezifikationen zu entwickeln.
+
+**4. Schlankheit und Einfachheit:** Die Verwendung von reinem Flask macht meine Anwendung schlank und einfach. Es gibt keine unnötigen Abhängigkeiten oder komplexe Strukturen, was die Wartbarkeit und Skalierbarkeit meiner Anwendung erleichtert.
+
+#### Vergleich von Flask und Flask-Erweiterungen
+
+| Kriterium                                      | Flask          | Flask-Erweiterungen |
+| ---------------------------------------------- | --------------- | -------------------- |
+| Vollständige Kontrolle                         | ✔️               | ❌                   |
+| Anforderungen                                  | ✔️               | ❌                   |
+| Erfahrung in der Entwicklung                   | ✔️               | ❌                   |
+| Schlankheit und Einfachheit                    | ✔️               | ❌                   |
+
+Die obige Tabelle zeigt den Vergleich zwischen der Verwendung von Flask und Flask-Erweiterungen basierend auf verschiedenen Kriterien. Für mein Projekt haben die Eigenschaften von Flask den Ausschlag gegeben.
+
+
+Ich habe auf die Verwendung von Flask-Erweiterungen verzichtet, um die API-Entwicklung bewusst in einfacher Weise zu halten und mich darauf zu konzentrieren, die Grundlagen von Flask gründlich zu verstehen. Dies ermöglichte mir eine engere Anpassung an die spezifischen Anforderungen meines Projekts und die Erweiterung meines eigenen Wissens über Flask.
